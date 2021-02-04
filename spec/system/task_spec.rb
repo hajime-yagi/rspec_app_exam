@@ -76,7 +76,7 @@ RSpec.describe 'Task', type: :system do
         expect(current_path).to eq project_task_path(project, task)
       end
 
-      fit '既にステータスが完了のタスクのステータスを変更した場合、Taskの完了日が更新されないこと' do
+      it '既にステータスが完了のタスクのステータスを変更した場合、Taskの完了日が更新されないこと' do
         # TODO: FactoryBotのtraitを利用してください
         visit edit_project_task_path(project, task)
         select 'todo', from: 'Status'
@@ -88,9 +88,10 @@ RSpec.describe 'Task', type: :system do
     end
   end
   describe 'Task削除' do
+    let!(:task){ create(:task, project_id: project.id) }
     context '正常系' do
       # FIXME: テストが失敗するので修正してください
-      it 'Taskが削除されること' do
+      fit 'Taskが削除されること' do
         visit project_tasks_path(project)
         click_link 'Destroy'
         page.driver.browser.switch_to.alert.accept
