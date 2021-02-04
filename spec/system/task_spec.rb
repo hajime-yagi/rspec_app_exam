@@ -13,7 +13,7 @@ RSpec.describe 'Task', type: :system do
         expect(current_path).to eq project_tasks_path(project)
       end
 
-      fit 'Project詳細からTask一覧ページにアクセスした場合、Taskが表示されること' do
+      it 'Project詳細からTask一覧ページにアクセスした場合、Taskが表示されること' do
         # FIXME: テストが失敗するので修正してください
         visit project_path(project)
         click_link 'View Todos'
@@ -54,8 +54,9 @@ RSpec.describe 'Task', type: :system do
   end
 
   describe 'Task編集' do
+    let(:task_done) { create(:task, :done) }
     context '正常系' do
-      fit 'Taskを編集した場合、一覧画面で編集後の内容が表示されること' do
+      it 'Taskを編集した場合、一覧画面で編集後の内容が表示されること' do
         # FIXME: テストが失敗するので修正してください
         visit edit_project_task_path(project, task)
         fill_in 'Deadline', with: Time.current
@@ -75,10 +76,8 @@ RSpec.describe 'Task', type: :system do
         expect(current_path).to eq project_task_path(project, task)
       end
 
-      it '既にステータスが完了のタスクのステータスを変更した場合、Taskの完了日が更新されないこと' do
+      fit '既にステータスが完了のタスクのステータスを変更した場合、Taskの完了日が更新されないこと' do
         # TODO: FactoryBotのtraitを利用してください
-        project = FactoryBot.create(:project)
-        task = FactoryBot.create(:task, project_id: project.id, status: :done, completion_date: Time.current.yesterday)
         visit edit_project_task_path(project, task)
         select 'todo', from: 'Status'
         click_button 'Update Task'
@@ -88,11 +87,10 @@ RSpec.describe 'Task', type: :system do
       end
     end
   end
-
   describe 'Task削除' do
     context '正常系' do
       # FIXME: テストが失敗するので修正してください
-      fit 'Taskが削除されること' do
+      it 'Taskが削除されること' do
         visit project_tasks_path(project)
         click_link 'Destroy'
         page.driver.browser.switch_to.alert.accept
